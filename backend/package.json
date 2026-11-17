@@ -1,0 +1,31 @@
+{
+  "name": "inventario-electronica-backend",
+  "version": "1.0.0",
+  "description": "API ElectroLab: Express, MongoDB Atlas, JWT, RBAC, Zod, OCC y pago simulado",
+  "main": "server.js",
+  "engines": { "node": ">=22 <23" },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "provision": "node scripts/provisionWorker.js",
+    "migrate": "node scripts/migrateToV1.js",
+    "seed:demo": "node scripts/seedDemo.js",
+    "mail:verify": "node scripts/verifySmtp.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.3.1",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.4.0",
+    "nodemailer": "^6.9.14",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

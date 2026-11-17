@@ -12,7 +12,27 @@
 - AsyncStorage conserva únicamente el perfil y el carrito. En web, la sesión vive en memoria y se pierde al recargar.
 - Gmail SMTP se puede verificar en local. Render gratuito necesita el transporte HTTPS (`MAIL_PROVIDER=brevo`).
 
-## Builds generados (versión 0.1.0)
+## Entrega 0.2.0
+
+La revisión manual de la web fue aprobada el 17 de noviembre de 2026. El commit `053b3bd` está publicado en Render (deploy `dep-dbubf9ou01pc73enklfg`). Se verificaron salud de la API, acceso de administrador, 20 SKU registrados, catálogo e historial de reembolsos mediante peticiones reales.
+
+La versión incorpora calendario de citas de 20 minutos, disponibilidad y protección frente a reservas simultáneas; CRUD de SKU y selección en productos; idiomas español/inglés; nuevo icono y nombre ElectroLab; corrección del cierre del historial al cambiar de pestaña. Pasaron 18 pruebas unitarias y la integración de la base de revisión.
+
+Las compilaciones 0.2.0 usan la API de producción. En la APK descargada se verificaron `versionCode=2`, versión 0.2.0, identificador anterior, certificado de firma idéntico al de la APK 0.1.0 y URL de producción dentro del bundle. El archivo real del simulador iOS declara `CFBundleVersion=1` (aunque el contador remoto de EAS avanzó a 2), nombre ElectroLab y versión visible 0.2.0; se verificaron esos valores y la URL de producción dentro del bundle descargado. Las credenciales del cliente `review@electrolab.test` corresponden solamente a la web de revisión: las apps usan cuentas de producción.
+
+- Android APK 0.2.0 terminado: [descarga](https://expo.dev/artifacts/eas/z2Z0TGLqWpOCm3VS9hO8u65LsCcaWJn4Vlbpp4ksmuA.apk) · [compilación](https://expo.dev/accounts/viyatg/projects/inventario-electronica-mvp/builds/97f9a5a1-7f35-4116-9fde-db83b29fd40f). Copia local: `releases/ElectroLab-0.2.0-android.apk`.
+- Simulador iOS 0.2.0 terminado: [descarga](https://expo.dev/artifacts/eas/bPH3GcmKYdz1C8Nngxo39j01pT4ugWk2Ra7x41iWDHI.tar.gz) · [compilación](https://expo.dev/accounts/viyatg/projects/inventario-electronica-mvp/builds/0e70d609-7d11-43bc-b210-6c88af2b4e53). Copia local: `releases/ElectroLab-0.2.0-ios-simulator.tar.gz`.
+
+Huellas SHA-256 de la entrega:
+
+```text
+1F1F252F4F54D8018ECBFCA5049E24D9C131F4FECB4712ECEC9DC13774746C88  ElectroLab-0.2.0-android.apk
+537F1CBC4E87C31519E4DAFEF0850F960BB7793894AA53B86AF01104CC4C7B1E  ElectroLab-0.2.0-ios-simulator.tar.gz
+```
+
+La instalación y la prueba de los nuevos flujos en Android y en el simulador iOS quedan pendientes. Estas verificaciones de artefactos y API no sustituyen la revisión en dispositivo.
+
+## Builds anteriores (versión 0.1.0)
 
 - Android APK: [descarga](https://expo.dev/artifacts/eas/oILm9haP4ecFfdx63MPPaTniKk2MgEirwJ8dYLQFaP0.apk) · [compilación EAS](https://expo.dev/accounts/viyatg/projects/inventario-electronica-mvp/builds/e75ab997-8e84-4869-ba48-ce806803e2a6).
 - Simulador iOS: [descarga](https://expo.dev/artifacts/eas/rLN6VN8hYu7ky0R_pVa3RbrpOEtAGaW08FUCbeghEKY.tar.gz) · [compilación EAS](https://expo.dev/accounts/viyatg/projects/inventario-electronica-mvp/builds/9115f78c-9e31-4a0d-a374-0d5ce8b2e39b).

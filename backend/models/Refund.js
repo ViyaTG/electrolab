@@ -18,6 +18,8 @@ const refundSchema = new mongoose.Schema(
     metodoReembolso: { type: String, enum: ['tarjeta', 'efectivo'], required: true },
     modalidad: { type: String, enum: ['cita_fisica', 'correo', 'directo'], required: true },
     fechaCita: { type: String },
+    horaCita: { type: String },
+    reservaActiva: { type: Boolean, default: false },
     fotoEvidencia: { type: String },
     // Resultado de la revisión del producto: solo si funciona vuelve al inventario.
     funciona: { type: Boolean, default: null },
@@ -29,4 +31,5 @@ const refundSchema = new mongoose.Schema(
   { timestamps: true, collection: 'reembolsos' }
 );
 
+refundSchema.index({ fechaCita: 1, horaCita: 1 }, { unique: true, partialFilterExpression: { modalidad: 'cita_fisica', reservaActiva: true } });
 module.exports = mongoose.model('Refund', refundSchema);

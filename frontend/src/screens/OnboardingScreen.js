@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Text, TouchableOpacity } from '../i18n/ui';
 import GlassCard from '../components/GlassCard';
 
 export default function OnboardingScreen({ onStartLogin }) {
@@ -9,7 +10,7 @@ export default function OnboardingScreen({ onStartLogin }) {
       <View style={styles.glowCircleBottom} />
       <GlassCard style={styles.card} intensity={55}>
         <Text style={styles.badge}>MVP v0.1.0 • ACCESO INTERNO</Text>
-        <Text style={styles.title}>ElectroStock Lab</Text>
+        <Text style={styles.title}>ElectroLab</Text>
         <Text style={styles.subtitle}>
           Gestión de inventario de componentes electrónicos con búsqueda difusa (Fuzzy Search) y
           Control de Concurrencia Optimista (OCC) en tiempo real.

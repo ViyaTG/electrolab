@@ -1,3 +1,4 @@
+import { locale } from './i18n';
 export const colors = {
   bg: '#F1F1F3',
   text: '#171719',
@@ -23,6 +24,6 @@ export function stockLevel(qty) {
 
 export const money = (n) => `$${Number(n || 0).toFixed(2)}`;
 export const fmtDate = (d) =>
-  new Date(d).toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' });
+  new Date(d).toLocaleDateString(locale(), { day: '2-digit', month: 'short', year: 'numeric' });
 export const fmtDateTime = (d) =>
-  new Date(d).toLocaleString('es-MX', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  new Date(d).toLocaleString(locale(), { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });

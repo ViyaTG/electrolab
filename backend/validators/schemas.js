@@ -1,6 +1,7 @@
 const { z } = require('zod');
 const { passesLuhn } = require('../utils/luhn');
 const { MAX_PHOTO_CHARS } = require('../config/constants');
+const { isFutureDay, SLOTS } = require('../services/appointments');
 
 // Mensajes de validación en español.
 z.setErrorMap((issue, ctx) => {
@@ -45,6 +46,8 @@ const resetPassword = z
 
 // ---------- Catálogo ----------
 const categoryBody = z.object({ nombre: text(2, 60) }).strict();
+const skuBody = z.object({ codigo: text(1, 40).transform((v) => v.toUpperCase()), descripcion: text(0, 120).default('') }).strict();
+const appointmentQuery = z.object({ fecha: z.string().refine((v) => isFutureDay(v), 'Elige un día posterior a hoy.') }).strict();
 
 const productFields = {
   sku: text(1, 40),
@@ -124,14 +127,16 @@ const refundCreate = z
     metodoReembolso: refundMethod,
     modalidad: z.enum(['cita_fisica', 'correo']),
     fechaCita: isoDate.optional(),
+    horaCita: z.enum(SLOTS).optional(),
     fotoEvidencia: z
       .string()
       .max(MAX_PHOTO_CHARS, 'La imagen es demasiado pesada')
       .regex(/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/, 'La foto debe ser una imagen JPG, PNG o WEBP')
   })
   .strict()
-  .refine((d) => d.modalidad !== 'cita_fisica' || !!d.fechaCita, { message: 'Indica la fecha de la cita', path: ['fechaCita'] })
-  .refine((d) => !d.fechaCita || d.fechaCita >= new Date().toISOString().slice(0, 10), { message: 'La fecha de la cita no puede ser pasada', path: ['fechaCita'] });
+  .refine((d) => d.modalidad !== 'cita_fisica' || isFutureDay(d.fechaCita), { message: 'Elige un día posterior a hoy.', path: ['fechaCita'] })
+  .refine((d) => d.modalidad !== 'cita_fisica' || !!d.horaCita, { message: 'Selecciona un horario disponible.', path: ['horaCita'] })
+  .refine((d) => d.modalidad !== 'correo' || (!d.fechaCita && !d.horaCita), { message: 'Las devoluciones por correo no llevan cita.', path: ['fechaCita'] });
 const refundResolve = z
   .object({ decision: z.enum(['aprobar', 'rechazar']), funciona: z.boolean().optional(), notas: text(0, 300).optional() })
   .strict()
@@ -156,6 +161,6 @@ const reportQuery = z
   .strict();
 
 module.exports = {
-  register, login, forgotPassword, resetPassword, categoryBody, productCreate, productUpdate, productListQuery,
+  register, login, forgotPassword, resetPassword, categoryBody, skuBody, appointmentQuery, productCreate, productUpdate, productListQuery,
   checkout, salesSearchQuery, listQuery, refundCreate, refundResolve, refundDirect, refundListQuery, idParam, folioParam, reportQuery
 };

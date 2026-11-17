@@ -1,4 +1,6 @@
 const Product = require('../models/Product');
+const mongoose = require('mongoose');
+const Sku = require('../models/Sku');
 const Category = require('../models/Category');
 const asyncHandler = require('../utils/asyncHandler');
 const HttpError = require('../utils/httpError');
@@ -24,12 +26,14 @@ exports.listProducts = asyncHandler(async (req, res) => {
 exports.createProduct = asyncHandler(async (req, res) => {
   const data = req.body;
   await assertCategoryExists(data.categoria);
-  const product = await Product.create({
-    ...data,
-    sku: data.sku.toUpperCase(),
-    codigoBarras: data.codigoBarras || undefined,
-    version: 0,
-    actualizadoPor: req.user.email
+  let product;
+  await mongoose.connection.transaction(async (session) => {
+    const sku = data.sku.toUpperCase();
+    if (!(await Sku.findOneAndUpdate({ codigo: sku }, { $inc: { version: 1 } }, { session }))) throw new HttpError(400, 'Selecciona un SKU registrado.');
+    [product] = await Product.create([{
+      ...data, sku, codigoBarras: data.codigoBarras || undefined,
+      version: 0, actualizadoPor: req.user.email
+    }], { session });
   });
   await product.populate('categoria', 'nombre');
   res.status(201).json(product);
@@ -50,7 +54,11 @@ exports.updateProduct = asyncHandler(async (req, res) => {
   }
   update.$set = set;
 
-  const updated = await Product.findOneAndUpdate({ _id: id, version }, update, { new: true, runValidators: true }).populate('categoria', 'nombre');
+  let updated;
+  await mongoose.connection.transaction(async (session) => {
+    if (set.sku && !(await Sku.findOneAndUpdate({ codigo: set.sku }, { $inc: { version: 1 } }, { session }))) throw new HttpError(400, 'Selecciona un SKU registrado.');
+    updated = await Product.findOneAndUpdate({ _id: id, version }, update, { new: true, runValidators: true, session }).populate('categoria', 'nombre');
+  });
   if (updated) return res.json(updated);
 
   const current = await Product.findById(id).populate('categoria', 'nombre');

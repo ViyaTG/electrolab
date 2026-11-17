@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { Modal, StyleSheet, Text, View } from 'react-native';
+import { Modal, StyleSheet, View } from 'react-native';
+import { Text } from '../i18n/ui';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { Btn } from './ui';
 import { colors } from '../theme';

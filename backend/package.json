@@ -11,6 +11,9 @@
     "migrate": "node scripts/migrateToV1.js",
     "seed:demo": "node scripts/seedDemo.js",
     "mail:verify": "node scripts/verifySmtp.js",
+    "review:prepare": "node scripts/prepareWebReview.js",
+    "review:start": "node -r dotenv/config server.js dotenv_config_path=review.env.local",
+    "review:verify": "node scripts/verifyWebReview.js",
     "test": "node --test tests/*.test.js"
   },
   "dependencies": {

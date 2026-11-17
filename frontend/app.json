@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Inventario Electrónica",
+    "name": "ElectroLab",
     "slug": "inventario-electronica-mvp",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "icon": "./assets/icon.png",
@@ -16,7 +16,9 @@
       "package": "com.laboratorio.inventarioelectronica",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#F1F1F3"
+        "backgroundColor": "#F1F1F3",
+        "backgroundImage": "./assets/adaptive-background.png",
+        "monochromeImage": "./assets/adaptive-monochrome.png"
       }
     },
     "ios": {
@@ -31,6 +33,11 @@
         "projectId": "4c978474-cff9-4b60-b144-c40fb5bad21d"
       }
     },
-    "owner": "viyatg"
+    "owner": "viyatg",
+    "web": {
+      "name": "ElectroLab",
+      "shortName": "ElectroLab",
+      "favicon": "./assets/favicon.png"
+    }
   }
 }

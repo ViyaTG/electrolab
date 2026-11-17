@@ -2,6 +2,7 @@ const HttpError = require('../utils/httpError');
 
 const DUPLICATE_MESSAGES = {
   sku: 'Ya existe un producto con ese SKU.',
+  codigo: 'Ya existe ese SKU.',
   codigoBarras: 'Ese código de barras ya está asignado a otro producto.',
   nombre: 'Ya existe una categoría con ese nombre.',
   email: 'Ya existe una cuenta con ese correo.',
@@ -14,6 +15,7 @@ module.exports = (err, req, res, next) => {
     return res.status(err.status).json({ message: err.message, ...err.extra });
   }
   if (err && err.code === 11000) {
+    if (err.keyPattern?.fechaCita || err.keyPattern?.horaCita) return res.status(409).json({ code: 'APPOINTMENT_TAKEN', message: 'El horario ya no está disponible. Elige otro.' });
     const field = Object.keys(err.keyPattern || {})[0];
     return res.status(409).json({ code: 'DUPLICADO', message: DUPLICATE_MESSAGES[field] || 'Ya existe un registro con esos datos.' });
   }

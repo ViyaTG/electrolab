@@ -1,5 +1,6 @@
 import React from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Alert, Text, TouchableOpacity } from '../i18n/ui';
 import GlassCard from '../components/GlassCard';
 import { Btn, Empty, Screen } from '../components/ui';
 import { useAuth } from '../context/AuthContext';

@@ -1,0 +1,12 @@
+const router = require('express').Router();
+const ctrl = require('../controllers/skuController');
+const { verifyToken, requireRole } = require('../middlewares/authMiddleware');
+const { STAFF_ROLES } = require('../config/constants');
+const validate = require('../middlewares/validate');
+const s = require('../validators/schemas');
+router.use(verifyToken, requireRole(...STAFF_ROLES));
+router.get('/', ctrl.list);
+router.post('/', validate(s.skuBody), ctrl.create);
+router.put('/:id', validate(s.idParam, 'params'), validate(s.skuBody), ctrl.update);
+router.delete('/:id', validate(s.idParam, 'params'), ctrl.remove);
+module.exports = router;

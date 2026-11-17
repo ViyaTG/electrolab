@@ -5,6 +5,7 @@ frontend/node_modules/
 .expo/
 dist/
 web-build/
+review-dist/
 /releases/
 
 # Variables de entorno y secretos

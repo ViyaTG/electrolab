@@ -11,6 +11,7 @@ router.use(verifyToken);
 // Cliente
 router.post('/', requireRole(ROLES.CLIENTE), validate(s.refundCreate), ctrl.createRefund);
 router.get('/mine', requireRole(ROLES.CLIENTE), ctrl.myRefunds);
+router.get('/availability', requireRole(ROLES.CLIENTE), validate(s.appointmentQuery, 'query'), ctrl.appointmentAvailability);
 
 // Trabajador y administrador
 router.get('/', requireRole(...STAFF_ROLES), validate(s.refundListQuery, 'query'), ctrl.listRefunds);

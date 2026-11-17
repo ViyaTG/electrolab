@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Text } from '../i18n/ui';
 import Icon from '../components/Icon';
 import GlassCard from '../components/GlassCard';
 import { Btn, Field, Msg, Screen } from '../components/ui';

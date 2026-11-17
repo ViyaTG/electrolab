@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
+import { Text, TouchableOpacity } from '../i18n/ui';
 import GlassCard from '../components/GlassCard';
 import { Badge, Btn, Chip, Empty, Field, Msg, Screen, Segmented } from '../components/ui';
 import { useAuth } from '../context/AuthContext';
 import { useNav } from '../context/NavContext';
 import { errMsg } from '../api/client';
-import { REFUND_STATE } from './MyRefundsScreen';
+import { refundStatus } from '../utils/refundStatus';
 import { colors, fmtDate, money } from '../theme';
 
 // ---------- Opción A: folio generado desde la app ----------
@@ -66,11 +67,11 @@ function FolioRefunds() {
       {refund ? (
         <GlassCard style={{ marginBottom: 14 }} intensity={50}>
           <Text style={styles.folio}>{refund.folio}</Text>
-          <Badge text={REFUND_STATE[refund.estado].label} color={REFUND_STATE[refund.estado].color} bg={REFUND_STATE[refund.estado].bg} />
+          <Badge text={refundStatus(refund.estado).label} color={refundStatus(refund.estado).color} bg={refundStatus(refund.estado).bg} />
           <Text style={styles.line}>Cliente: {refund.clienteNombre}</Text>
           <Text style={styles.line}>Venta: {refund.ventaFolio}</Text>
           <Text style={styles.line}>{refund.cantidad} × {refund.nombre} ({refund.sku}) — {money(refund.monto)}</Text>
-          <Text style={styles.line}>Reembolso: {refund.metodoReembolso} • Entrega: {refund.modalidad === 'cita_fisica' ? `cita física ${refund.fechaCita || ''}` : 'por correo'}</Text>
+          <Text style={styles.line}>Reembolso: {refund.metodoReembolso} • Entrega: {refund.modalidad === 'cita_fisica' ? `cita física ${refund.fechaCita || ''} ${refund.horaCita || ''}` : 'por correo'}</Text>
           <Text style={styles.line}>Motivo: {refund.motivo}</Text>
           {refund.fotoEvidencia ? <Image source={{ uri: refund.fotoEvidencia }} style={styles.photo} /> : null}
 

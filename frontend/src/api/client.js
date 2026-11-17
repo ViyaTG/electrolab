@@ -49,7 +49,8 @@ export async function apiRequest(endpoint, { method = 'GET', body, token } = {})
 export function errMsg(err) {
   if (err?.errors?.length) {
     const first = err.errors[0];
-    return first.campo ? `${first.campo}: ${first.mensaje}` : first.mensaje;
+    const labels = { fechaCita: 'Fecha', horaCita: 'Horario', codigo: 'Código SKU', sku: 'SKU', nombre: 'Nombre', precio: 'Precio ($)', cantidad: 'Cantidad', categoria: 'Categoría', email: 'Correo', password: 'Contraseña', motivo: 'Motivo', fotoEvidencia: 'Foto del producto', descripcion: 'Descripción' };
+    return first.campo ? `${labels[first.campo] || first.campo}: ${first.mensaje}` : first.mensaje;
   }
   return err?.message || 'Ocurrió un error inesperado';
 }

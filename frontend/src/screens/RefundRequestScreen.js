@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
+import { Text } from '../i18n/ui';
 import * as ImagePicker from 'expo-image-picker';
 import Icon from '../components/Icon';
 import GlassCard from '../components/GlassCard';
+import AppointmentCalendar from '../components/AppointmentCalendar';
 import { Btn, Chip, Field, Msg, Screen } from '../components/ui';
 import { useAuth } from '../context/AuthContext';
 import { useNav } from '../context/NavContext';
@@ -21,6 +23,8 @@ export default function RefundRequestScreen({ sale, item }) {
   const [metodo, setMetodo] = useState('tarjeta');
   const [modalidad, setModalidad] = useState('cita_fisica');
   const [fechaCita, setFechaCita] = useState('');
+  const [horaCita, setHoraCita] = useState('');
+  const [slotRefresh, setSlotRefresh] = useState(0);
   const [foto, setFoto] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -50,17 +54,19 @@ export default function RefundRequestScreen({ sale, item }) {
     const qty = parseInt(cantidad, 10);
     if (!qty || qty < 1 || qty > max) return setError(`La cantidad debe estar entre 1 y ${max}.`);
     if (!foto) return setError('Adjunta una foto del producto.');
+    if (modalidad === 'cita_fisica' && (!fechaCita || !horaCita)) return setError('Selecciona un horario disponible.');
     setLoading(true);
     try {
       const data = await api('/refunds', {
         method: 'POST',
         body: {
           ventaId: sale._id, productoId: item.producto, cantidad: qty, motivo: motivo.trim(),
-          metodoReembolso: metodo, modalidad, fechaCita: modalidad === 'cita_fisica' ? fechaCita.trim() : undefined, fotoEvidencia: foto
+          metodoReembolso: metodo, modalidad, fechaCita: modalidad === 'cita_fisica' ? fechaCita : undefined, horaCita: modalidad === 'cita_fisica' ? horaCita : undefined, fotoEvidencia: foto
         }
       });
       setCreated(data);
     } catch (err) {
+      if (err.code === 'APPOINTMENT_TAKEN') { setHoraCita(''); setSlotRefresh((value) => value + 1); }
       setError(errMsg(err));
     } finally {
       setLoading(false);
@@ -76,7 +82,7 @@ export default function RefundRequestScreen({ sale, item }) {
           <Text style={styles.folio}>{created.folio}</Text>
           <Text style={styles.note}>
             {created.modalidad === 'cita_fisica'
-              ? `Preséntalo en tienda el ${created.fechaCita} junto con el producto.`
+              ? `Preséntalo en tienda el ${created.fechaCita} ${created.horaCita} junto con el producto.`
               : 'Un trabajador revisará tu solicitud y te contactará por correo.'}
           </Text>
           <Text style={styles.note}>Monto a reembolsar: {money(created.monto)}</Text>
@@ -106,7 +112,7 @@ export default function RefundRequestScreen({ sale, item }) {
           <Chip label="Cita física" active={modalidad === 'cita_fisica'} onPress={() => setModalidad('cita_fisica')} />
           <Chip label="Por correo" active={modalidad === 'correo'} onPress={() => setModalidad('correo')} />
         </View>
-        {modalidad === 'cita_fisica' ? <Field label="Fecha de la cita (AAAA-MM-DD)" value={fechaCita} onChangeText={setFechaCita} placeholder="2026-12-01" keyboardType="numbers-and-punctuation" /> : null}
+        {modalidad === 'cita_fisica' ? <AppointmentCalendar date={fechaCita} time={horaCita} onDateChange={setFechaCita} onTimeChange={setHoraCita} refreshKey={slotRefresh} /> : null}
 
         <Text style={styles.label}>Foto del producto</Text>
         {foto ? <Image source={{ uri: foto }} style={styles.photo} /> : null}

@@ -21,6 +21,9 @@ import RefundsManageScreen from './src/screens/RefundsManageScreen';
 import AdminHistoryScreen from './src/screens/AdminHistoryScreen';
 import ReportsScreen from './src/screens/ReportsScreen';
 import NotificationsScreen from './src/screens/NotificationsScreen';
+import LanguageProvider from './src/i18n/LanguageProvider';
+import SkusScreen from './src/screens/SkusScreen';
+import { useTranslation } from 'react-i18next';
 
 const TABS = { home: HomeScreen, cart: CartScreen, profile: ProfileScreen };
 const STACK_SCREENS = {
@@ -35,10 +38,12 @@ const STACK_SCREENS = {
   RefundsManage: RefundsManageScreen,
   AdminHistory: AdminHistoryScreen,
   Reports: ReportsScreen,
-  Notifications: NotificationsScreen
+  Notifications: NotificationsScreen,
+  Skus: SkusScreen
 };
 
 function Root() {
+  useTranslation();
   const { ready, user } = useAuth();
   const { tab, stack, goTab } = useNav();
   const top = stack[stack.length - 1];
@@ -67,7 +72,7 @@ export default function App() {
   const [splashDone, setSplashDone] = useState(false);
   const finishSplash = useCallback(() => setSplashDone(true), []);
   return (
-    <AuthProvider>
+    <LanguageProvider><AuthProvider>
       <CartProvider>
         <NavProvider>
           <View style={{ flex: 1 }}>
@@ -78,7 +83,7 @@ export default function App() {
           </View>
         </NavProvider>
       </CartProvider>
-    </AuthProvider>
+    </AuthProvider></LanguageProvider>
   );
 }
 

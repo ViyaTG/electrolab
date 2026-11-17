@@ -31,6 +31,7 @@ const authLimiter = rateLimit({
 
 app.use('/api/auth', authLimiter, require('./routes/authRoutes'));
 app.use('/api/categories', require('./routes/categoryRoutes'));
+app.use('/api/skus', require('./routes/skuRoutes'));
 app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/sales', require('./routes/saleRoutes'));
 app.use('/api/refunds', require('./routes/refundRoutes'));
@@ -44,10 +45,13 @@ app.use((req, res) => res.status(404).json({ message: 'Ruta no encontrada' }));
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 4000;
-connectDB().then(() => {
+connectDB().then(async () => {
+  await require('./models/Sku').init();
+  await require('./models/Refund').init();
+  await require('./controllers/skuController').importExistingSkus();
   const server = app.listen(PORT, '0.0.0.0', () => console.log(`ElectroLab API v1.0.0 ejecutándose en el puerto ${PORT}`));
   process.on('SIGTERM', () => {
     server.close(async () => { await mongoose.disconnect(); process.exit(0); });
     setTimeout(() => process.exit(1), 10000).unref();
   });
-});
+}).catch((error) => { console.error('No se pudo preparar la API:', error.message); process.exit(1); });

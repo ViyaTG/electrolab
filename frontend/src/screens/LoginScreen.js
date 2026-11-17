@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, ActivityIndicator } from 'react-native';
+import { Text, TextInput, TouchableOpacity } from '../i18n/ui';
 import GlassCard from '../components/GlassCard';
 import { apiRequest } from '../api/client';
 

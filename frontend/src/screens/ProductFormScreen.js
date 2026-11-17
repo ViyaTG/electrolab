@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Modal, StyleSheet, View } from 'react-native';
+import { Alert, Text, TouchableOpacity } from '../i18n/ui';
 import Icon from '../components/Icon';
 import GlassCard from '../components/GlassCard';
 import BarcodeScannerModal from '../components/BarcodeScannerModal';
+import SelectField from '../components/SelectField';
 import { Btn, Field, Msg, Screen } from '../components/ui';
 import { useAuth } from '../context/AuthContext';
 import { useNav } from '../context/NavContext';
@@ -27,6 +29,8 @@ export default function ProductFormScreen({ product }) {
   const [current, setCurrent] = useState(product || null); // documento base (con su versión OCC)
   const [form, setForm] = useState(toForm(product));
   const [categories, setCategories] = useState([]);
+  const [skus, setSkus] = useState([]);
+  const [skusLoading, setSkusLoading] = useState(true);
   const [pickerOpen, setPickerOpen] = useState(false);
   const [scanOpen, setScanOpen] = useState(false);
   const [error, setError] = useState('');
@@ -34,12 +38,14 @@ export default function ProductFormScreen({ product }) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => { api('/categories').then(setCategories).catch((e) => setError(errMsg(e))); }, [api]);
+  useEffect(() => { api('/skus').then(setSkus).catch((e) => setError(errMsg(e))).finally(() => setSkusLoading(false)); }, [api]);
 
   const set = (key) => (value) => setForm((f) => ({ ...f, [key]: value }));
   const categoryName = categories.find((c) => c._id === form.categoria)?.nombre;
 
   const save = async () => {
     setError('');
+    if (!form.sku) return setError('Selecciona un SKU registrado.');
     if (!form.categoria) return setError('Selecciona una categoría.');
     const precio = Number(form.precio);
     const cantidad = Number(form.cantidad);
@@ -88,7 +94,9 @@ export default function ProductFormScreen({ product }) {
         <Msg text={error} />
         {conflict ? <Btn title="Cargar la versión actual" variant="ghost" onPress={loadLatest} style={{ marginBottom: 12 }} /> : null}
 
-        <Field label="SKU" value={form.sku} onChangeText={set('sku')} autoCapitalize="characters" placeholder="ESP32-S3" />
+        <SelectField label="SKU" placeholder="Selecciona un SKU" value={form.sku} searchable loading={skusLoading} options={skus.map((sku) => ({ value: sku.codigo, label: `${sku.codigo}${sku.descripcion ? ` — ${sku.descripcion}` : ''}`, disabled: sku.productos > 0 && sku.codigo !== current?.sku }))} onChange={set('sku')} />
+        {!skusLoading && skus.length === 0 ? <Text style={styles.link}>No hay SKU disponibles. Crea uno desde el perfil.</Text> : null}
+        {skus.length > 0 && skus.every((sku) => sku.productos > 0 && sku.codigo !== current?.sku) ? <Text style={styles.link}>Todos los SKU están asignados. Crea uno desde el perfil.</Text> : null}
         <Field label="Nombre" value={form.nombre} onChangeText={set('nombre')} autoCapitalize="words" placeholder="Microcontrolador ESP32-S3" />
 
         <Text style={styles.label}>Categoría</Text>

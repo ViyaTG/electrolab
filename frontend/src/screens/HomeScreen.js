@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList, Platform, RefreshControl, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { FlatList, Platform, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
+import { Text, TextInput, TouchableOpacity } from '../i18n/ui';
 import Icon from '../components/Icon';
+import LanguagePicker from '../components/LanguagePicker';
 import GlassCard from '../components/GlassCard';
 import BarcodeScannerModal from '../components/BarcodeScannerModal';
 import { Chip, Empty, Loading, Msg } from '../components/ui';
@@ -55,7 +57,7 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <GlassCard style={styles.searchCard} intensity={50}>
         <View style={styles.titleRow}>
-          <View style={{ flex: 1, minWidth: 140 }}><Text style={styles.brand}>ES</Text><Text style={styles.headerTitle}>{isStaff ? 'Inventario' : 'Catálogo'}</Text><Text style={styles.subtitle}>Componentes para tu próximo proyecto.</Text></View>
+          <View style={{ flex: 1, minWidth: 140 }}><LanguagePicker /><Text style={styles.headerTitle}>{isStaff ? 'Inventario' : 'Catálogo'}</Text><Text style={styles.subtitle}>Componentes para tu próximo proyecto.</Text></View>
           <View style={styles.actions}>
             {isAdmin ? (
               <TouchableOpacity accessibilityRole="button" accessibilityLabel="Alertas de stock" style={styles.bell} onPress={() => nav.push('Notifications')}>

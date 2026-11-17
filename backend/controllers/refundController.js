@@ -6,20 +6,25 @@ const asyncHandler = require('../utils/asyncHandler');
 const HttpError = require('../utils/httpError');
 const { generateFolio } = require('../utils/folio');
 const { assertRefundable, pendingQtyFor } = require('../services/refundRules');
+const { TIME_ZONE, SLOTS, todayInStore } = require('../services/appointments');
 
 const round2 = (n) => Math.round(n * 100) / 100;
 const LIST_FIELDS = '-fotoEvidencia';
 
 // Cliente: crea la solicitud y se genera el folio.
 exports.createRefund = asyncHandler(async (req, res) => {
-  const { ventaId, productoId, cantidad, motivo, metodoReembolso, modalidad, fechaCita, fotoEvidencia } = req.body;
-  const sale = await Sale.findOne({ _id: ventaId, cliente: req.user.id });
+  const { ventaId, productoId, cantidad, motivo, metodoReembolso, modalidad, fechaCita, horaCita, fotoEvidencia } = req.body;
+  let refund;
+  await mongoose.connection.transaction(async (session) => {
+  const sale = await Sale.findOne({ _id: ventaId, cliente: req.user.id }).session(session);
   if (!sale) throw new HttpError(404, 'Venta no encontrada.');
 
-  const pending = await pendingQtyFor(sale._id, productoId);
+  // Serialize requests against the same sale so pending quantities cannot be oversubscribed.
+  await Sale.updateOne({ _id: sale._id }, { $inc: { __v: 1 } }, { session });
+  const pending = await pendingQtyFor(sale._id, productoId, session);
   const item = assertRefundable(sale, productoId, cantidad, pending);
 
-  const refund = await Refund.create({
+  [refund] = await Refund.create([{
     folio: generateFolio('RMB'),
     tipo: 'app',
     venta: sale._id,
@@ -35,7 +40,10 @@ exports.createRefund = asyncHandler(async (req, res) => {
     metodoReembolso,
     modalidad,
     fechaCita,
+    horaCita,
+    reservaActiva: modalidad === 'cita_fisica',
     fotoEvidencia
+  }], { session });
   });
   const { fotoEvidencia: omitted, ...publicRefund } = refund.toObject();
   res.status(201).json(publicRefund);
@@ -43,6 +51,12 @@ exports.createRefund = asyncHandler(async (req, res) => {
 
 exports.myRefunds = asyncHandler(async (req, res) => {
   res.json(await Refund.find({ cliente: req.user.id }).select(LIST_FIELDS).sort({ createdAt: -1 }).limit(100));
+});
+
+exports.appointmentAvailability = asyncHandler(async (req, res) => {
+  const reserved = await Refund.find({ fechaCita: req.query.fecha, modalidad: 'cita_fisica', reservaActiva: true }).select('horaCita').lean();
+  const occupied = new Set(reserved.map((r) => r.horaCita));
+  res.json({ fecha: req.query.fecha, hoy: todayInStore(), zonaHoraria: TIME_ZONE, duracionMinutos: 20, horarios: SLOTS.map((hora) => ({ hora, disponible: !occupied.has(hora) })) });
 });
 
 exports.listRefunds = asyncHandler(async (req, res) => {
@@ -93,6 +107,7 @@ exports.resolveRefund = asyncHandler(async (req, res) => {
 
       if (decision === 'rechazar') {
         refund.estado = 'rechazado';
+        refund.reservaActiva = false;
       } else {
         const sale = await Sale.findById(refund.venta).session(session);
         if (!sale) throw new HttpError(404, 'La venta original ya no existe.');

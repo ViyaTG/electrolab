@@ -1,9 +1,11 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { TouchableOpacity, Text } from '../i18n/ui';
 import { BlurView } from 'expo-blur';
 import { useCart } from '../context/CartContext';
 import Icon from './Icon';
 import { colors } from '../theme';
+import { translateText } from '../i18n';
 
 const TABS = [
   { key: 'home', label: 'Inventario', icon: 'cube-outline', selected: 'cube' },
@@ -20,7 +22,7 @@ export default function BottomNavBar({ currentTab, onSelectTab }) {
           {TABS.map((tab) => {
             const active = currentTab === tab.key;
             return (
-              <TouchableOpacity key={tab.key} accessibilityRole="tab" accessibilityLabel={`${tab.label}${tab.key === 'cart' ? `, ${count} productos` : ''}`} accessibilityState={{ selected: active }} style={[styles.tab, active && styles.active]} onPress={() => onSelectTab(tab.key)}>
+              <TouchableOpacity key={tab.key} accessibilityRole="tab" accessibilityLabel={`${translateText(tab.label)}${tab.key === 'cart' ? translateText(`, ${count} productos`) : ''}`} accessibilityState={{ selected: active }} style={[styles.tab, active && styles.active]} onPress={() => onSelectTab(tab.key)}>
                 <Icon name={active ? tab.selected : tab.icon} size={24} color={active ? colors.text : colors.muted} />
                 <Text style={[styles.label, active && styles.activeLabel]}>{tab.label}</Text>
                 {tab.key === 'cart' && count > 0 ? <View style={styles.badge}><Text style={styles.badgeText}>{count > 99 ? '99+' : count}</Text></View> : null}

@@ -1,17 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { Text } from '../i18n/ui';
 import GlassCard from '../components/GlassCard';
 import { Badge, Empty, Loading, Msg, Screen } from '../components/ui';
 import { useAuth } from '../context/AuthContext';
 import { useNav } from '../context/NavContext';
 import { errMsg } from '../api/client';
 import { colors, fmtDate, money } from '../theme';
-
-export const REFUND_STATE = {
-  pendiente: { label: 'Pendiente', color: '#535359', bg: 'rgba(0, 0, 0, 0.08)' },
-  aprobado: { label: 'Aprobado', color: '#303035', bg: 'rgba(0, 0, 0, 0.08)' },
-  rechazado: { label: 'Rechazado', color: '#303035', bg: 'rgba(0, 0, 0, 0.08)' }
-};
+import { refundStatus } from '../utils/refundStatus';
 
 export default function MyRefundsScreen() {
   const { api } = useAuth();
@@ -29,13 +25,14 @@ export default function MyRefundsScreen() {
     <Screen title="Mis reembolsos" onBack={nav.back}>
       <Msg text={error} />
       {loading ? <Loading /> : items.length === 0 ? <Empty text="No has solicitado reembolsos." /> : items.map((r) => {
-        const st = REFUND_STATE[r.estado];
+        const st = refundStatus(r.estado);
         return (
           <GlassCard key={r._id} style={{ marginBottom: 12 }} intensity={40}>
             <Text style={styles.folio}>{r.folio}</Text>
             <Text style={styles.name}>{r.cantidad} × {r.nombre}</Text>
             <Text style={styles.meta}>Venta {r.ventaFolio} • {fmtDate(r.createdAt)} • {money(r.monto)}</Text>
             <Badge text={st.label} color={st.color} bg={st.bg} />
+            {r.fechaCita ? <Text style={styles.meta}>Cita: {r.fechaCita} {r.horaCita || ''}</Text> : null}
             {r.estado === 'aprobado' ? <Text style={styles.meta}>Producto {r.funciona ? 'funciona: regresó al inventario' : 'no funciona: no se reintegra al inventario'}</Text> : null}
             {r.notas ? <Text style={styles.meta}>Nota: {r.notas}</Text> : null}
           </GlassCard>

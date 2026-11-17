@@ -9,11 +9,15 @@
       "distribution": "internal"
     },
     "preview": {
+      "autoIncrement": true,
+      "env": { "EXPO_PUBLIC_API_URL": "https://electrolab-api-2tob.onrender.com/api" },
       "distribution": "internal",
       "environment": "preview",
       "android": { "buildType": "apk" }
     },
     "ios-simulator": {
+      "autoIncrement": true,
+      "env": { "EXPO_PUBLIC_API_URL": "https://electrolab-api-2tob.onrender.com/api" },
       "distribution": "internal",
       "environment": "preview",
       "ios": { "simulator": true }

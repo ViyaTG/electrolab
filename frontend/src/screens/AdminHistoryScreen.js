@@ -1,11 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, Text } from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { StyleSheet } from 'react-native';
+import { Text } from '../i18n/ui';
 import GlassCard from '../components/GlassCard';
 import { Badge, Btn, Empty, Loading, Msg, Screen, Segmented } from '../components/ui';
 import { useAuth } from '../context/AuthContext';
 import { useNav } from '../context/NavContext';
 import { errMsg } from '../api/client';
-import { REFUND_STATE } from './MyRefundsScreen';
+import { refundStatus } from '../utils/refundStatus';
 import { colors, fmtDateTime, money } from '../theme';
 
 const PAGE = 20;
@@ -14,39 +15,51 @@ export default function AdminHistoryScreen() {
   const { api } = useAuth();
   const nav = useNav();
   const [tab, setTab] = useState('ventas');
-  const [data, setData] = useState({ items: [], total: 0 });
+  const [data, setData] = useState({ kind: 'ventas', items: [], total: 0 });
+  const [loadingMore, setLoadingMore] = useState(false);
+  const requestVersion = useRef(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   const fetchPage = useCallback(async (kind, skip) => {
     const path = kind === 'ventas' ? '/sales' : '/refunds';
-    return api(`${path}?limit=${PAGE}&skip=${skip}`);
+    const page = await api(`${path}?limit=${PAGE}&skip=${skip}`);
+    if (!Array.isArray(page?.items)) throw new Error('No se pudo cargar el historial. Intenta de nuevo.');
+    return { kind, items: page.items, total: Number(page.total) || 0 };
   }, [api]);
 
   useEffect(() => {
-    setLoading(true); setError(''); setData({ items: [], total: 0 });
-    fetchPage(tab, 0).then(setData).catch((e) => setError(errMsg(e))).finally(() => setLoading(false));
+    const version = ++requestVersion.current;
+    setLoading(true); setLoadingMore(false); setError(''); setData({ kind: tab, items: [], total: 0 });
+    fetchPage(tab, 0).then((page) => { if (version === requestVersion.current) setData(page); })
+      .catch((e) => { if (version === requestVersion.current) setError(errMsg(e)); })
+      .finally(() => { if (version === requestVersion.current) setLoading(false); });
+    return () => { requestVersion.current++; };
   }, [tab, fetchPage]);
 
   const more = async () => {
+    if (loadingMore || loading || data.kind !== tab) return;
+    const version = requestVersion.current;
+    setLoadingMore(true);
     try {
       const next = await fetchPage(tab, data.items.length);
-      setData({ total: next.total, items: [...data.items, ...next.items] });
-    } catch (e) { setError(errMsg(e)); }
+      if (version === requestVersion.current) setData((previous) => ({ kind: tab, total: next.total, items: [...new Map([...previous.items, ...next.items].map((row) => [row._id, row])).values()] }));
+    } catch (e) { if (version === requestVersion.current) setError(errMsg(e)); }
+    finally { if (version === requestVersion.current) setLoadingMore(false); }
   };
 
   return (
     <Screen title="Historial global" onBack={nav.back}>
       <Segmented value={tab} onChange={setTab} options={[{ key: 'ventas', label: 'Ventas' }, { key: 'reembolsos', label: 'Reembolsos' }]} />
       <Msg text={error} />
-      {loading ? <Loading /> : data.items.length === 0 ? <Empty text="Sin registros." /> : (
+      {loading || data.kind !== tab ? <Loading /> : data.items.length === 0 ? <Empty text="Sin registros." /> : (
         <>
           <Text style={styles.count}>{data.total} registro(s)</Text>
           {data.items.map((row) => tab === 'ventas' ? (
             <GlassCard key={row._id} style={{ marginBottom: 10 }} intensity={40}>
               <Text style={styles.folio}>{row.folio}</Text>
               <Text style={styles.line}>{row.clienteNombre} • {fmtDateTime(row.createdAt)}</Text>
-              <Text style={styles.line}>{row.items.map((i) => `${i.cantidad}× ${i.nombre}`).join(', ')}</Text>
+              <Text style={styles.line}>{(row.items || []).map((i) => `${i.cantidad}× ${i.nombre}`).join(', ')}</Text>
               <Text style={styles.total}>{money(row.total)}</Text>
             </GlassCard>
           ) : (
@@ -55,11 +68,11 @@ export default function AdminHistoryScreen() {
               <Text style={styles.line}>{row.clienteNombre} • {fmtDateTime(row.createdAt)}</Text>
               <Text style={styles.line}>{row.cantidad}× {row.nombre} (venta {row.ventaFolio})</Text>
               <Text style={styles.total}>{money(row.monto)}</Text>
-              <Badge text={REFUND_STATE[row.estado].label} color={REFUND_STATE[row.estado].color} bg={REFUND_STATE[row.estado].bg} />
+              <Badge text={refundStatus(row.estado).label} color={refundStatus(row.estado).color} bg={refundStatus(row.estado).bg} />
               {row.procesadoPor ? <Text style={styles.line}>Procesó: {row.procesadoPor}{row.estado === 'aprobado' ? (row.funciona ? ' • funciona' : ' • no funciona') : ''}</Text> : null}
             </GlassCard>
           ))}
-          {data.items.length < data.total ? <Btn title="Cargar más" variant="ghost" onPress={more} /> : null}
+          {data.items.length < data.total ? <Btn title="Cargar más" variant="ghost" onPress={more} loading={loadingMore} /> : null}
         </>
       )}
     </Screen>

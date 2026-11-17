@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Text, TouchableOpacity } from '../i18n/ui';
 import Icon from '../components/Icon';
 import GlassCard from '../components/GlassCard';
 import { Badge, Btn, Screen } from '../components/ui';
@@ -64,7 +65,7 @@ export default function ProfileScreen() {
 
       {isStaff ? (
         <>
-          <MenuItem icon="cube-outline" label="Productos (inventario)" onPress={() => nav.goTab('home')} />
+          <MenuItem icon="barcode-outline" label="SKU registrados" onPress={() => nav.push('Skus')} />
           <MenuItem icon="pricetags-outline" label="Categorías" onPress={() => nav.push('Categories')} />
           <MenuItem icon="return-down-back-outline" label="Gestión de reembolsos" onPress={() => nav.push('RefundsManage')} />
         </>

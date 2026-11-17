@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { Text } from '../i18n/ui';
 import GlassCard from '../components/GlassCard';
 import { Btn, Field, Msg, Screen } from '../components/ui';
 import { useAuth } from '../context/AuthContext';

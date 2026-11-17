@@ -1,9 +1,11 @@
 node_modules/
 .expo/
 dist/
+review-dist/
 releases/
 .env
 .env.*
+*.env.local
 !.env.example
 *.local.json
 tests/

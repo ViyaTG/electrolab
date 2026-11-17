@@ -7,18 +7,20 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 const refundDeadline = (sale) => new Date(new Date(sale.createdAt).getTime() + REFUND_WINDOW_DAYS * DAY_MS);
 
 // Unidades ya solicitadas (pendientes) por producto, para no sobre-reembolsar.
-async function pendingQtyMap(saleIds) {
-  const rows = await Refund.aggregate([
+async function pendingQtyMap(saleIds, session = null) {
+  const query = Refund.aggregate([
     { $match: { venta: { $in: saleIds }, estado: 'pendiente' } },
     { $group: { _id: { venta: '$venta', producto: '$producto' }, qty: { $sum: '$cantidad' } } }
   ]);
+  if (session) query.session(session);
+  const rows = await query;
   const map = new Map();
   rows.forEach((r) => map.set(`${r._id.venta}:${r._id.producto}`, r.qty));
   return map;
 }
 
-async function pendingQtyFor(saleId, productId) {
-  const map = await pendingQtyMap([saleId]);
+async function pendingQtyFor(saleId, productId, session = null) {
+  const map = await pendingQtyMap([saleId], session);
   return map.get(`${saleId}:${productId}`) || 0;
 }
 

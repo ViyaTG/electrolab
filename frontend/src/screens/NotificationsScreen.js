@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Text } from '../i18n/ui';
 import GlassCard from '../components/GlassCard';
 import { Empty, Loading, Msg, Screen } from '../components/ui';
 import { useAuth } from '../context/AuthContext';

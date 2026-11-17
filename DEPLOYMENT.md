@@ -12,6 +12,14 @@
 - AsyncStorage conserva únicamente el perfil y el carrito. En web, la sesión vive en memoria y se pierde al recargar.
 - Gmail SMTP se puede verificar en local. Render gratuito necesita el transporte HTTPS (`MAIL_PROVIDER=brevo`).
 
+## Builds generados (versión 0.1.0)
+
+- Android APK: [descarga](https://expo.dev/artifacts/eas/oILm9haP4ecFfdx63MPPaTniKk2MgEirwJ8dYLQFaP0.apk) · [compilación EAS](https://expo.dev/accounts/viyatg/projects/inventario-electronica-mvp/builds/e75ab997-8e84-4869-ba48-ce806803e2a6).
+- Simulador iOS: [descarga](https://expo.dev/artifacts/eas/rLN6VN8hYu7ky0R_pVa3RbrpOEtAGaW08FUCbeghEKY.tar.gz) · [compilación EAS](https://expo.dev/accounts/viyatg/projects/inventario-electronica-mvp/builds/9115f78c-9e31-4a0d-a374-0d5ce8b2e39b).
+- Copias locales en `releases/`, excluidas de Git y de las cargas de EAS.
+
+Ambos builds usan la API HTTPS de Render. El archivo de iOS contiene una `.app` para simulador: no se instala en un iPhone físico. La instalación y la prueba de los flujos en dispositivo/simulador quedan pendientes.
+
 ## 1. Preparar el correo por HTTPS
 
 1. Crea o utiliza una cuenta de Brevo y verifica el remitente. Sigue su [guía de remitentes](https://developers.brevo.com/docs/getting-started-with-senders-and-domains).

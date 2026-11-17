@@ -2,6 +2,11 @@
 
 ## Estado del proyecto
 
+- API publicada: `https://electrolab-api-2tob.onrender.com/api`.
+- Servicio Render: `electrolab-api-2tob`, plan gratuito, región Oregon, espacio `My Workspace`.
+- Repositorio privado: `https://github.com/ViyaTG/electrolab`.
+- Proyecto Expo: `@viyatg/inventario-electronica-mvp`. Los entornos `preview` y `production` ya tienen `EXPO_PUBLIC_API_URL` configurada.
+- Brevo: clave API y remitente activo verificados sin enviar mensajes. La recepción de un código real aún debe comprobarse desde una cuenta de cliente.
 - MongoDB Atlas ya contiene el catálogo y las cuentas; Render alojará solamente la API.
 - Android e iOS guardan el JWT en SecureStore. La primera apertura migra la sesión anterior y borra el JWT de AsyncStorage.
 - AsyncStorage conserva únicamente el perfil y el carrito. En web, la sesión vive en memoria y se pierde al recargar.

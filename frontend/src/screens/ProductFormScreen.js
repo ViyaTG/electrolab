@@ -23,6 +23,11 @@ const toForm = (p) => ({
   codigoBarras: p?.codigoBarras || ''
 });
 
+/**
+ * Alta o edición, escaneo y resolución de conflicto.
+ * @param {object} props Propiedades de composición y callbacks definidos en la firma.
+ * @returns {React.ReactElement|null} Vista y estados de carga correspondientes.
+ */
 export default function ProductFormScreen({ product }) {
   const { api } = useAuth();
   const nav = useNav();

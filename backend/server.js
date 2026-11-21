@@ -21,6 +21,12 @@ app.use(cors());
 app.use(express.json({ limit: '2mb' })); // las fotos de reembolso viajan en base64
 app.use(sanitize); // elimina operadores $ y etiquetas HTML antes de llegar a los controladores
 
+// Contrato derivado de validadores y routers. Swagger sirve sus recursos localmente.
+const openapi = require('./docs/openapi');
+const swagger = require('swagger-ui-express');
+app.get('/api/openapi.json', (req, res) => res.json(openapi));
+app.use('/api/docs', swagger.serve, swagger.setup(openapi));
+
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 60,

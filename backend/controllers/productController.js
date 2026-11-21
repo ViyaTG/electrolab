@@ -1,3 +1,8 @@
+/**
+ * @module controllers/productController
+ * Casos de uso HTTP. Los routers aplican autenticación, roles y validación Zod.
+ * @see ../routes/productRoutes.js
+ */
 const Product = require('../models/Product');
 const mongoose = require('mongoose');
 const Sku = require('../models/Sku');

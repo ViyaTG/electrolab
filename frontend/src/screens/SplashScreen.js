@@ -4,6 +4,11 @@ import Animated, { cancelAnimation, Easing, runOnJS, useAnimatedStyle, useShared
 import { StatusBar } from 'expo-status-bar';
 import { colors } from '../theme';
 
+/**
+ * Monta la animación sobre `Root`.
+ * @param {object} props Propiedades de composición y callbacks definidos en la firma.
+ * @returns {React.ReactElement|null} Vista y estados de carga correspondientes.
+ */
 export default function SplashScreen({ onFinish }) {
   const { width, height } = useWindowDimensions();
   // A filled ring opens a transparent circle onto the actual interface beneath it.

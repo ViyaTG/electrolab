@@ -2,6 +2,11 @@ import React from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import { BlurView } from 'expo-blur';
 
+/**
+ * Componente React GlassCard.
+ * @param {object} props Propiedades de composición y callbacks definidos en la firma.
+ * @returns {React.ReactElement|null} Vista y estados de carga correspondientes.
+ */
 export default function GlassCard({ children, style, intensity = 45, contentStyle }) {
   return (
     <View style={[styles.wrapper, style]}>

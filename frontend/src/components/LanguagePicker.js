@@ -8,6 +8,11 @@ import { Btn, Msg } from './ui';
 import Icon from './Icon';
 import { colors } from '../theme';
 
+/**
+ * Componente React LanguagePicker.
+ * @param {object} props Propiedades de composición y callbacks definidos en la firma.
+ * @returns {React.ReactElement|null} Vista y estados de carga correspondientes.
+ */
 export default function LanguagePicker() {
   useTranslation();
   const [open, setOpen] = useState(false);

@@ -8,6 +8,11 @@ import { useNav } from '../context/NavContext';
 import { errMsg } from '../api/client';
 import { colors, money } from '../theme';
 
+/**
+ * Alterna agrupaciones.
+ * @param {object} props Propiedades de composición y callbacks definidos en la firma.
+ * @returns {React.ReactElement|null} Vista y estados de carga correspondientes.
+ */
 export default function ReportsScreen() {
   const { api } = useAuth();
   const nav = useNav();

@@ -4,6 +4,11 @@ import { Text, TextInput, TouchableOpacity, Alert } from '../i18n/ui';
 import GlassCard from '../components/GlassCard';
 import { apiRequest } from '../api/client';
 
+/**
+ * Conserva el formulario del MVP.
+ * @param {object} props Propiedades de composición y callbacks definidos en la firma.
+ * @returns {React.ReactElement|null} Vista y estados de carga correspondientes.
+ */
 export default function ComponentCrudScreen({ token, selectedComponent, onSaved, onClearSelection }) {
   const isEditing = Boolean(selectedComponent && selectedComponent._id);
   const [sku, setSku] = useState('');

@@ -1,3 +1,8 @@
+/**
+ * @module controllers/refundController
+ * Casos de uso HTTP. Los routers aplican autenticación, roles y validación Zod.
+ * @see ../routes/refundRoutes.js
+ */
 const mongoose = require('mongoose');
 const Refund = require('../models/Refund');
 const Sale = require('../models/Sale');

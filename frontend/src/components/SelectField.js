@@ -6,6 +6,11 @@ import Icon from './Icon';
 import { Btn, Empty, Loading } from './ui';
 import { colors } from '../theme';
 
+/**
+ * Componente React SelectField.
+ * @param {object} props Propiedades de composición y callbacks definidos en la firma.
+ * @returns {React.ReactElement|null} Vista y estados de carga correspondientes.
+ */
 export default function SelectField({ label, placeholder, value, options, onChange, searchable = false, loading = false }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');

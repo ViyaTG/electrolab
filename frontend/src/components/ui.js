@@ -5,6 +5,11 @@ import { colors } from '../theme';
 import Icon from './Icon';
 
 // Contenedor de pantalla con encabezado opcional (botón atrás + título).
+/**
+ * Componente React Screen.
+ * @param {object} props Propiedades de composición y callbacks definidos en la firma.
+ * @returns {React.ReactElement|null} Vista y estados de carga correspondientes.
+ */
 export function Screen({ title, onBack, right, children, tab = false, scroll = true }) {
   const Body = scroll ? ScrollView : View;
   return (

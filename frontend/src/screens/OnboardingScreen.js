@@ -3,6 +3,11 @@ import { StyleSheet, View } from 'react-native';
 import { Text, TouchableOpacity } from '../i18n/ui';
 import GlassCard from '../components/GlassCard';
 
+/**
+ * Invoca el callback `onStartLogin`.
+ * @param {object} props Propiedades de composición y callbacks definidos en la firma.
+ * @returns {React.ReactElement|null} Vista y estados de carga correspondientes.
+ */
 export default function OnboardingScreen({ onStartLogin }) {
   return (
     <View style={styles.container}>

@@ -26,6 +26,16 @@ async function pendingQtyFor(saleId, productId, session = null) {
 
 // Valida plazo de 90 días y cantidad reembolsable. `referenceDate` permite
 // evaluar el plazo a la fecha en que el cliente hizo la solicitud.
+/**
+ * Verifica pertenencia, plazo y unidades disponibles de una venta histórica.
+ * @param {object} sale Venta con renglones y fecha de creación.
+ * @param {string|object} productId Identificador de producto.
+ * @param {number} cantidad Unidades solicitadas, validadas por la ruta.
+ * @param {number} [pendingQty=0] Unidades en otras solicitudes pendientes.
+ * @param {Date} [referenceDate] Fecha de solicitud al resolver, o fecha actual.
+ * @returns {object} Renglón de venta elegible.
+ * @throws {HttpError} Si falta el producto, venció el plazo o excede unidades.
+ */
 function assertRefundable(sale, productId, cantidad, pendingQty = 0, referenceDate = new Date()) {
   const item = sale.items.find((i) => String(i.producto) === String(productId));
   if (!item) throw new HttpError(404, 'El producto no pertenece a esa venta.', { code: 'PRODUCTO_NO_EN_VENTA' });

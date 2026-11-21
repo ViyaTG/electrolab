@@ -11,6 +11,11 @@ import { colors, fmtDateTime, money } from '../theme';
 
 const PAGE = 20;
 
+/**
+ * Aísla datos por pestaña y descarta respuestas viejas.
+ * @param {object} props Propiedades de composición y callbacks definidos en la firma.
+ * @returns {React.ReactElement|null} Vista y estados de carga correspondientes.
+ */
 export default function AdminHistoryScreen() {
   const { api } = useAuth();
   const nav = useNav();

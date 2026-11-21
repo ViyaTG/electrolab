@@ -9,6 +9,11 @@ import { errMsg } from '../api/client';
 import { colors, fmtDate, money } from '../theme';
 import { refundStatus } from '../utils/refundStatus';
 
+/**
+ * Presenta estado y datos de cita.
+ * @param {object} props Propiedades de composición y callbacks definidos en la firma.
+ * @returns {React.ReactElement|null} Vista y estados de carga correspondientes.
+ */
 export default function MyRefundsScreen() {
   const { api } = useAuth();
   const nav = useNav();

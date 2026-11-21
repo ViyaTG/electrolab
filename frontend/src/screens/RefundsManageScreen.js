@@ -212,6 +212,11 @@ function DirectRefund() {
   );
 }
 
+/**
+ * Gestiona pendientes, folios y devoluciones directas.
+ * @param {object} props Propiedades de composición y callbacks definidos en la firma.
+ * @returns {React.ReactElement|null} Vista y estados de carga correspondientes.
+ */
 export default function RefundsManageScreen() {
   const nav = useNav();
   const [tab, setTab] = useState('folio');

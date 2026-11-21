@@ -1,4 +1,10 @@
 // Platform dependencies are injected so the migration can be tested without a device.
+/**
+ * Crea el adaptador de sesión con dependencias inyectables para pruebas.
+ * @param {object} adapters SecureStore, almacenamiento heredado y bandera native.
+ * @returns {{save: Function, read: Function, clear: Function}} Operaciones de sesión.
+ * @description Migra el JWT nativo al almacén seguro. Web conserva sesión en memoria.
+ */
 export function createSessionStorage({ secure, legacy, native }) {
   const TOKEN_KEY = 'electrolab.jwt';
   const PROFILE_KEY = 'electrolab.profile';

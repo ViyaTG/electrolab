@@ -13,6 +13,11 @@ import { errMsg } from '../api/client';
 import { clientFuzzySearch } from '../utils/fuzzySearch';
 import { colors, money, stockLevel } from '../theme';
 
+/**
+ * Filtra localmente y abre edición con el producto seleccionado.
+ * @param {object} props Propiedades de composición y callbacks definidos en la firma.
+ * @returns {React.ReactElement|null} Vista y estados de carga correspondientes.
+ */
 export default function HomeScreen() {
   const { api, isStaff, isAdmin } = useAuth();
   const cart = useCart();

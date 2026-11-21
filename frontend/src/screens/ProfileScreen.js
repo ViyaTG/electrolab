@@ -21,6 +21,11 @@ function MenuItem({ icon, label, onPress }) {
   );
 }
 
+/**
+ * Ofrece navegación y cierre de sesión.
+ * @param {object} props Propiedades de composición y callbacks definidos en la firma.
+ * @returns {React.ReactElement|null} Vista y estados de carga correspondientes.
+ */
 export default function ProfileScreen() {
   const { user, isCliente, isStaff, isAdmin, logout } = useAuth();
   const nav = useNav();

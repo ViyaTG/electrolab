@@ -6,6 +6,11 @@ import { Btn } from './ui';
 import { colors } from '../theme';
 
 // Escáner de códigos de barras con la cámara. Devuelve el texto leído mediante onScanned.
+/**
+ * Componente React BarcodeScannerModal.
+ * @param {object} props Propiedades de composición y callbacks definidos en la firma.
+ * @returns {React.ReactElement|null} Vista y estados de carga correspondientes.
+ */
 export default function BarcodeScannerModal({ visible, onClose, onScanned }) {
   const [permission, requestPermission] = useCameraPermissions();
   const handled = useRef(false);

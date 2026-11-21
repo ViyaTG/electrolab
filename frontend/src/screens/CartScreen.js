@@ -8,6 +8,11 @@ import { useCart } from '../context/CartContext';
 import { useNav } from '../context/NavContext';
 import { colors, money } from '../theme';
 
+/**
+ * Edita cantidades desde `CartContext` y solicita login con intención de compra cuando corresponde.
+ * @param {object} props Propiedades de composición y callbacks definidos en la firma.
+ * @returns {React.ReactElement|null} Vista y estados de carga correspondientes.
+ */
 export default function CartScreen() {
   const { session, isCliente } = useAuth();
   const cart = useCart();

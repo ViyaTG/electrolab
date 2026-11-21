@@ -1,3 +1,8 @@
+/**
+ * @module controllers/reportController
+ * Casos de uso HTTP. Los routers aplican autenticación, roles y validación Zod.
+ * @see ../routes/reportRoutes.js
+ */
 const Sale = require('../models/Sale');
 const Refund = require('../models/Refund');
 const Product = require('../models/Product');

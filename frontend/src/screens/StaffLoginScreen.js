@@ -8,6 +8,11 @@ import { useNav } from '../context/NavContext';
 import { apiRequest } from '../api/client';
 import { colors } from '../theme';
 
+/**
+ * Guarda la sesión y finaliza la intención de navegación.
+ * @param {object} props Propiedades de composición y callbacks definidos en la firma.
+ * @returns {React.ReactElement|null} Vista y estados de carga correspondientes.
+ */
 export default function StaffLoginScreen() {
   const { login } = useAuth();
   const nav = useNav();

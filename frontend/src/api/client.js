@@ -8,6 +8,13 @@ export const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? `http://${host}:4
 
 const REQUEST_TIMEOUT_MS = 15000;
 
+/**
+ * Ejecuta una petición JSON y conserva los detalles de conflicto del servidor.
+ * @param {string} endpoint Ruta relativa a API_BASE_URL con barra inicial.
+ * @param {object} [options] Método, cuerpo y token Bearer opcionales.
+ * @returns {Promise<object|Array>} Respuesta JSON parseada.
+ * @throws {Error} Error HTTP con status y metadatos, o error de red sin status.
+ */
 export async function apiRequest(endpoint, { method = 'GET', body, token } = {}) {
   const headers = { 'Content-Type': 'application/json' };
   if (token) headers.Authorization = `Bearer ${token}`;

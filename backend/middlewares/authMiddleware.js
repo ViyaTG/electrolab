@@ -35,11 +35,15 @@ const optionalAuth = (req, res, next) => {
 };
 
 // RBAC: solo los roles indicados pueden continuar.
-const requireRole = (...roles) => (req, res, next) => {
-  if (!req.user || !roles.includes(req.user.rol)) {
-    return res.status(403).json({ code: 'PROHIBIDO', message: 'No tienes permisos para realizar esta acción.' });
-  }
-  return next();
+const requireRole = (...roles) => {
+  const middleware = (req, res, next) => {
+    if (!req.user || !roles.includes(req.user.rol)) {
+      return res.status(403).json({ code: 'PROHIBIDO', message: 'No tienes permisos para realizar esta acción.' });
+    }
+    return next();
+  };
+  middleware.allowedRoles = roles;
+  return middleware;
 };
 
 module.exports = { verifyToken, optionalAuth, requireRole };

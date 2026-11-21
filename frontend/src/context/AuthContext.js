@@ -4,6 +4,11 @@ import { sessionStorage } from '../storage/session';
 
 const AuthContext = createContext(null);
 
+/**
+ * Proveedor React de sesión y API autenticada.
+ * @param {object} props Propiedades de composición y callbacks definidos en la firma.
+ * @returns {React.ReactElement|null} Vista y estados de carga correspondientes.
+ */
 export function AuthProvider({ children }) {
   const [session, setSession] = useState(null); // { token, user }
   const [ready, setReady] = useState(false);

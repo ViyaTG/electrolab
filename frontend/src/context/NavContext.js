@@ -4,6 +4,11 @@ import { BackHandler } from 'react-native';
 // Navegación mínima: 3 pestañas + una pila de pantallas por encima.
 const NavContext = createContext(null);
 
+/**
+ * Proveedor React de pestañas, pila e intención posterior al login.
+ * @param {object} props Propiedades de composición y callbacks definidos en la firma.
+ * @returns {React.ReactElement|null} Vista y estados de carga correspondientes.
+ */
 export function NavProvider({ children }) {
   const [tab, setTab] = useState('home');
   const [stack, setStack] = useState([]);

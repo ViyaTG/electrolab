@@ -1,3 +1,8 @@
+/**
+ * @module controllers/saleController
+ * Casos de uso HTTP. Los routers aplican autenticación, roles y validación Zod.
+ * @see ../routes/saleRoutes.js
+ */
 const mongoose = require('mongoose');
 const Product = require('../models/Product');
 const Sale = require('../models/Sale');

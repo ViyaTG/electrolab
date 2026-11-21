@@ -1,3 +1,8 @@
+/**
+ * @module controllers/authController
+ * Casos de uso HTTP. Los routers aplican autenticación, roles y validación Zod.
+ * @see ../routes/authRoutes.js
+ */
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');

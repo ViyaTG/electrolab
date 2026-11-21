@@ -8,6 +8,11 @@ import { useNav } from '../context/NavContext';
 import { errMsg } from '../api/client';
 import { colors, fmtDate, money } from '../theme';
 
+/**
+ * Presenta renglones de venta y abre devolución cuando la interfaz la considera disponible.
+ * @param {object} props Propiedades de composición y callbacks definidos en la firma.
+ * @returns {React.ReactElement|null} Vista y estados de carga correspondientes.
+ */
 export default function PurchaseHistoryScreen() {
   const { api } = useAuth();
   const nav = useNav();

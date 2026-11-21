@@ -4,6 +4,11 @@ import { Text, TextInput, TouchableOpacity } from '../i18n/ui';
 import GlassCard from '../components/GlassCard';
 import { apiRequest } from '../api/client';
 
+/**
+ * La API vigente asigna esa ruta a clientes.
+ * @param {object} props Propiedades de composición y callbacks definidos en la firma.
+ * @returns {React.ReactElement|null} Vista y estados de carga correspondientes.
+ */
 export default function LoginScreen({ onLoginSuccess, onBack }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

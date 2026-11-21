@@ -10,6 +10,11 @@ import { colors } from '../theme';
 
 const TITLES = { login: 'Iniciar sesión', register: 'Crear cuenta', forgot: 'Recuperar contraseña', reset: 'Nueva contraseña' };
 
+/**
+ * Alterna modos del formulario.
+ * @param {object} props Propiedades de composición y callbacks definidos en la firma.
+ * @returns {React.ReactElement|null} Vista y estados de carga correspondientes.
+ */
 export default function CustomerAuthScreen() {
   const { login } = useAuth();
   const nav = useNav();

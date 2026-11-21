@@ -1,3 +1,8 @@
+/**
+ * @module controllers/categoryController
+ * Casos de uso HTTP. Los routers aplican autenticación, roles y validación Zod.
+ * @see ../routes/categoryRoutes.js
+ */
 const Category = require('../models/Category');
 const Product = require('../models/Product');
 const asyncHandler = require('../utils/asyncHandler');

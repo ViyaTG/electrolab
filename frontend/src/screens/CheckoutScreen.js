@@ -16,6 +16,11 @@ const formatExpiry = (v) => {
   return d.length > 2 ? `${d.slice(0, 2)}/${d.slice(2)}` : d;
 };
 
+/**
+ * Captura pago simulado y muestra el folio.
+ * @param {object} props Propiedades de composición y callbacks definidos en la firma.
+ * @returns {React.ReactElement|null} Vista y estados de carga correspondientes.
+ */
 export default function CheckoutScreen() {
   const { api, user } = useAuth();
   const cart = useCart();

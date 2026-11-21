@@ -13,6 +13,11 @@ const TABS = [
   { key: 'profile', label: 'Perfil', icon: 'person-outline', selected: 'person' }
 ];
 
+/**
+ * Componente React BottomNavBar.
+ * @param {object} props Propiedades de composición y callbacks definidos en la firma.
+ * @returns {React.ReactElement|null} Vista y estados de carga correspondientes.
+ */
 export default function BottomNavBar({ currentTab, onSelectTab }) {
   const { count } = useCart();
   return (

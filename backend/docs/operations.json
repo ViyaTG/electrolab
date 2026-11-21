@@ -1,0 +1,304 @@
+{
+  "POST /api/auth/register": {
+    "summary": "POST /api/auth/register",
+    "description": "Entrada. {nombre: texto(2–80), email, password} con contraseña nueva\n\nRespuesta. 201 Sesión, rol fijado a cliente. 409 si ya existe correo.",
+    "response": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "POST /api/auth/login": {
+    "summary": "POST /api/auth/login",
+    "description": "Entrada. {email,password} con password de 1–72 caracteres\n\nRespuesta. 200 Sesión para cuenta cliente. 401 message por credenciales inválidas.",
+    "response": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "POST /api/auth/staff/login": {
+    "summary": "POST /api/auth/staff/login",
+    "description": "Entrada. Mismo cuerpo\n\nRespuesta. 200 Sesión de personal. 401 message por credenciales inválidas.",
+    "response": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "POST /api/auth/forgot-password": {
+    "summary": "POST /api/auth/forgot-password",
+    "description": "Entrada. {email}\n\nRespuesta. 200 message genérico ante cuenta presente o ausente. El fallo del envío se registra en el servidor.",
+    "response": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "POST /api/auth/reset-password": {
+    "summary": "POST /api/auth/reset-password",
+    "description": "Entrada. {email,codigo,nuevaPassword}. Código string de seis dígitos y contraseña nueva\n\nRespuesta. 200 message al actualizar. 400 message ante código incorrecto, vencido, inexistente o límite agotado.",
+    "response": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "GET /api/auth/profile": {
+    "summary": "GET /api/auth/profile",
+    "description": "Entrada. Sin entrada propia\n\nRespuesta. 200 Perfil, 404 message si el usuario dejó de existir.",
+    "response": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "GET /api/categories": {
+    "summary": "GET /api/categories",
+    "description": "Entrada. Sin entrada propia\n\nRespuesta. 200 Category[] con productos como conteo por categoría. Orden por nombre con collation española.",
+    "response": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    }
+  },
+  "POST /api/categories": {
+    "summary": "POST /api/categories",
+    "description": "Entrada. {nombre: texto(2–60)}\n\nRespuesta. 201 Category con productos: 0, 409 DUPLICADO.",
+    "response": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "PUT /api/categories/:id": {
+    "summary": "PUT /api/categories/:id",
+    "description": "Entrada. id: ID, {nombre: texto(2–60)}\n\nRespuesta. 200 Category, 404 ausente, 409 DUPLICADO.",
+    "response": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "DELETE /api/categories/:id": {
+    "summary": "DELETE /api/categories/:id",
+    "description": "Entrada. id: ID\n\nRespuesta. 200 message, 404 ausente, 409 CATEGORY_IN_USE con productos.",
+    "response": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "GET /api/products": {
+    "summary": "GET /api/products",
+    "description": "Entrada. q?: texto(0–80), categoria?: ID\n\nRespuesta. 200 Product[] poblado. Solo personal recibe actualizadoPor. Filtra categoría y ordena por fecha de actualización antes de aplicar ranking textual.",
+    "response": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    }
+  },
+  "POST /api/products": {
+    "summary": "POST /api/products",
+    "description": "Entrada. sku, nombre, categoria, precio, cantidad requeridos y metadatos opcionales según tabla inferior\n\nRespuesta. 201 Product poblado. 400 si categoría o SKU no existen. 409 DUPLICADO si colisiona sku o codigoBarras.",
+    "response": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "PUT /api/products/:id": {
+    "summary": "PUT /api/products/:id",
+    "description": "Entrada. id: ID, version entero ≥0 requerido y campos de alta opcionales\n\nRespuesta. 200 Product poblado. 400 referencia no válida, 404 producto ausente, 409 DUPLICADO u OCC_CONFLICT con currentDocument.",
+    "response": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "DELETE /api/products/:id": {
+    "summary": "DELETE /api/products/:id",
+    "description": "Entrada. id: ID\n\nRespuesta. 200 message o 404.",
+    "response": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "GET /api/skus": {
+    "summary": "GET /api/skus",
+    "description": "Entrada. Sin entrada propia\n\nRespuesta. 200 Sku[], orden por codigo con productos por cada código.",
+    "response": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    }
+  },
+  "POST /api/skus": {
+    "summary": "POST /api/skus",
+    "description": "Entrada. {codigo: texto(1–40),descripcion?: texto(0–120)}. Normaliza código a mayúscula y usa descripción vacía si se omite\n\nRespuesta. 201 Sku con productos: 0, 409 DUPLICADO.",
+    "response": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "PUT /api/skus/:id": {
+    "summary": "PUT /api/skus/:id",
+    "description": "Entrada. id: ID y cuerpo de alta\n\nRespuesta. 200 Sku, 404 ausente, 409 DUPLICADO. Un cambio de código actualiza los productos en la misma transacción.",
+    "response": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "DELETE /api/skus/:id": {
+    "summary": "DELETE /api/skus/:id",
+    "description": "Entrada. id: ID\n\nRespuesta. 200 message, 404 ausente, 409 SKU_IN_USE.",
+    "response": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "POST /api/sales/checkout": {
+    "summary": "POST /api/sales/checkout",
+    "description": "Entrada. {items:[{productoId:ID,cantidad}],pago:{numeroTarjeta,titular,vencimiento,cvv}}. Arreglo de 1–50 renglones, cantidades enteras 1–999. Titular 2–80, MM/AA vigente, CVV de 3–4 dígitos. El número acepta dígitos, espacios y guiones antes de normalizar y validar Luhn\n\nRespuesta. 201 Sale. 402 PAGO_RECHAZADO, 401 TOKEN_INVALIDO si el usuario ya no existe, 404 PRODUCTO_NO_ENCONTRADO con productoId, 409 STOCK_INSUFICIENTE con productoId y disponible. Una colisión de folio se mapea a 409 DUPLICADO.",
+    "response": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "GET /api/sales/mine": {
+    "summary": "GET /api/sales/mine",
+    "description": "Entrada. Sin entrada propia\n\nRespuesta. 200 Sale[] decorado, hasta 100 recientes del usuario.",
+    "response": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    }
+  },
+  "GET /api/sales/search": {
+    "summary": "GET /api/sales/search",
+    "description": "Entrada. nombre?: texto(0–80), folio?: texto(0–30), al menos un valor no vacío. Nombre por coincidencia parcial y folio por prefijo, ambos insensibles a mayúsculas\n\nRespuesta. 200 Sale[] decorado, hasta 20 recientes. 400 message sin criterio.",
+    "response": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    }
+  },
+  "GET /api/sales": {
+    "summary": "GET /api/sales",
+    "description": "Entrada. limit, skip\n\nRespuesta. 200 {total,items: Sale[]} sin decoración.",
+    "response": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  },
+  "POST /api/refunds": {
+    "summary": "POST /api/refunds",
+    "description": "Entrada. ventaId, productoId, cantidad 1–999 entera, motivo 10–500, metodoReembolso, modalidad, fotoEvidencia y campos de cita según modalidad\n\nRespuesta. 201 Refund sin evidencia. 404 venta ajena/ausente o PRODUCTO_NO_EN_VENTA, 400 PLAZO_VENCIDO, 409 CANTIDAD_EXCEDIDA, 409 APPOINTMENT_TAKEN o DUPLICADO.",
+    "response": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "GET /api/refunds/mine": {
+    "summary": "GET /api/refunds/mine",
+    "description": "Entrada. Sin entrada propia\n\nRespuesta. 200 Refund[] sin evidencia, hasta 100 del usuario, más recientes primero.",
+    "response": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    }
+  },
+  "GET /api/refunds/availability": {
+    "summary": "GET /api/refunds/availability",
+    "description": "Entrada. fecha futura real, en formato AAAA-MM-DD\n\nRespuesta. 200 {fecha,hoy,zonaHoraria,duracionMinutos,horarios:[{hora,disponible}]}.",
+    "response": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "GET /api/refunds": {
+    "summary": "GET /api/refunds",
+    "description": "Entrada. estado? del enum, limit, skip\n\nRespuesta. 200 {total,items: Refund[]} sin evidencia y con total del filtro.",
+    "response": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  },
+  "GET /api/refunds/folio/:folio": {
+    "summary": "GET /api/refunds/folio/:folio",
+    "description": "Entrada. folio con patrón anterior, se busca en mayúsculas\n\nRespuesta. 200 Refund completo, 404 ausente.",
+    "response": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "PATCH /api/refunds/:id/resolve": {
+    "summary": "PATCH /api/refunds/:id/resolve",
+    "description": "Entrada. id: ID. {decision:\"aprobar\" o \"rechazar\",funciona?:boolean,notas?:texto(0–300)}. funciona es obligatorio al aprobar\n\nRespuesta. 200 Refund resuelto. 404 si falta reembolso, venta o ítem. 400 PLAZO_VENCIDO, 409 YA_RESUELTO, CANTIDAD_EXCEDIDA u OCC_CONFLICT.",
+    "response": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "POST /api/refunds/direct": {
+    "summary": "POST /api/refunds/direct",
+    "description": "Entrada. {ventaId,productoId,cantidad,funciona,metodoReembolso,motivo?}. IDs, cantidad entera 1–999, funciona booleano obligatorio, motivo opcional 0–300\n\nRespuesta. 201 Refund directo aprobado. 404 venta o ítem ausente, 400 PLAZO_VENCIDO, 409 CANTIDAD_EXCEDIDA, OCC_CONFLICT o DUPLICADO.",
+    "response": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "GET /api/reports/customers": {
+    "summary": "GET /api/reports/customers",
+    "description": "Entrada. desde?, hasta?, limit\n\nRespuesta. 200 [{_id,nombre,email,compras,unidades,totalGastado,reembolsado,neto}]. Orden por gasto. Agrega reembolsos aprobados del mismo filtro sobre createdAt.",
+    "response": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "GET /api/reports/top-products": {
+    "summary": "GET /api/reports/top-products",
+    "description": "Entrada. Mismo query\n\nRespuesta. 200 [{_id,sku,nombre,unidades,reembolsadas,ingresos,unidadesNetas}]. Orden descendente por unidades netas e ingresos. Ingresos usa ventas brutas.",
+    "response": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "GET /api/reports/stock-alerts": {
+    "summary": "GET /api/reports/stock-alerts",
+    "description": "Entrada. Sin entrada propia\n\nRespuesta. 200 {umbral,total,items:[{_id,sku,nombre,cantidad,categoria}]}. Filtra cantidad < 30, ordena por cantidad ascendente y puebla categoría.",
+    "response": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "GET /api/health": {
+    "summary": "GET /api/health",
+    "description": "Entrada. Sin entrada propia\n\nRespuesta. 200 {status:\"ok\",version:\"v1.0.0\"} o 503 {status:\"unavailable\",version:\"v1.0.0\"}.",
+    "response": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

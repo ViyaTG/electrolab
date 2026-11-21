@@ -4,6 +4,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const CART_KEY = 'electrolab.cart';
 const CartContext = createContext(null);
 
+/**
+ * Proveedor React de carrito persistente y cantidades.
+ * @param {object} props Propiedades de composición y callbacks definidos en la firma.
+ * @returns {React.ReactElement|null} Vista y estados de carga correspondientes.
+ */
 export function CartProvider({ children }) {
   const [items, setItems] = useState([]);
   const [loaded, setLoaded] = useState(false);

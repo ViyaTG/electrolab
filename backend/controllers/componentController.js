@@ -1,3 +1,8 @@
+/**
+ * @module controllers/componentController
+ * Casos de uso HTTP. Los routers aplican autenticación, roles y validación Zod.
+ * @see ../routes/componentRoutes.js
+ */
 const Component = require('../models/Component');
 const { fuzzyFilterAndRank } = require('../utils/fuzzySearch');
 

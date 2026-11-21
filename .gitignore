@@ -21,3 +21,7 @@ yarn-debug.log*
 yarn-error.log*
 .DS_Store
 Thumbs.db
+
+# Material de presentación y documentación separado del código
+*.md
+/entrega/

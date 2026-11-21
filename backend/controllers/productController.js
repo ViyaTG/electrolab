@@ -6,6 +6,7 @@ const asyncHandler = require('../utils/asyncHandler');
 const HttpError = require('../utils/httpError');
 const { fuzzyFilterAndRank } = require('../utils/fuzzySearch');
 const { STAFF_ROLES } = require('../config/constants');
+const { allocateBarcode } = require('../services/barcodes');
 
 const assertCategoryExists = async (id) => {
   if (!(await Category.exists({ _id: id }))) throw new HttpError(400, 'La categoría seleccionada no existe.');
@@ -31,7 +32,7 @@ exports.createProduct = asyncHandler(async (req, res) => {
     const sku = data.sku.toUpperCase();
     if (!(await Sku.findOneAndUpdate({ codigo: sku }, { $inc: { version: 1 } }, { session }))) throw new HttpError(400, 'Selecciona un SKU registrado.');
     [product] = await Product.create([{
-      ...data, sku, codigoBarras: data.codigoBarras || undefined,
+      ...data, sku, codigoBarras: data.codigoBarras || await allocateBarcode(Product, session),
       version: 0, actualizadoPor: req.user.email
     }], { session });
   });

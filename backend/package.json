@@ -10,6 +10,7 @@
     "provision": "node scripts/provisionWorker.js",
     "migrate": "node scripts/migrateToV1.js",
     "seed:demo": "node scripts/seedDemo.js",
+    "barcodes:assign": "node scripts/assignBarcodes.js",
     "mail:verify": "node scripts/verifySmtp.js",
     "review:prepare": "node scripts/prepareWebReview.js",
     "review:start": "node -r dotenv/config server.js dotenv_config_path=review.env.local",
